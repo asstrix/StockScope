@@ -3,7 +3,7 @@ import yfinance as yf
 
 def add_moving_average(data, window_size):
     if not data.empty:
-        data['MA'] = data['Close'].rolling(window=5).mean()
+        data['MA'] = data['Close'].rolling(window=window_size).mean()
         print(data['MA'])
 
 
