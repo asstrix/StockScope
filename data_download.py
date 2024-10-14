@@ -1,5 +1,4 @@
 import yfinance as yf
-from yfinance import shared
 
 
 def calculate_and_display_average_price(data):
