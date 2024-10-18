@@ -1,4 +1,4 @@
-from data_download import fetch_stock_data, calculate_and_display_average_price, notify_if_strong_fluctuations
+from data_download import fetch_stock_data, calculate_and_display_average_price, notify_if_strong_fluctuations, export_to_csv
 from log_manager import Logger, logging
 
 logger = Logger(log_level=logging.DEBUG)  # Set INFO to exclude functions' logging
@@ -22,6 +22,9 @@ def main():
 
 	log.info(f"Рассчитываем % колебания средней цены за период")
 	notify_if_strong_fluctuations(func_log, stock_data, threshold)
+
+	log.info(f"Сохраняем данные в csv")
+	export_to_csv(func_log, stock_data, f'{ticker}{period}')
 
 	log.info("Стоп")
 
