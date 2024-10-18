@@ -22,10 +22,10 @@ class Logger:
 
 		# Common logger settings
 		log_filename = os.path.join(self.log_dir, datetime.now().strftime("%Y%m%d.log"))
-		handler = TimedRotatingFileHandler(log_filename, when="midnight", interval=1)
+		handler = TimedRotatingFileHandler(log_filename, when="midnight", interval=1, encoding='utf-8')
 
 		# Logging format: hh:mm:ss.msc\t(main or function)\tmessage
-		formatter = logging.Formatter('%(asctime)s\t%(name)s\t%(message)s', datefmt='%H:%M:%S')
+		formatter = logging.Formatter(fmt='%(asctime)s.%(msecs)03d\t%(name)s\t%(message)s', datefmt='%H:%M:%S')
 		handler.setFormatter(formatter)
 		handler.setLevel(log_level)
 		# Add handler to both loggers
