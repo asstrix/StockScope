@@ -1,5 +1,6 @@
 import yfinance as yf
 from pathlib import Path
+import os
 
 
 # Get data from fc.yahoo.com
@@ -47,11 +48,12 @@ def notify_if_strong_fluctuations(logger, data, threshold, period):
 
 
 # Export all fetched data to csv
-def export_to_csv(logger, data, filename):
+def export_to_csv(logger, data, ticker, period):
     path = Path(__file__).parent
+    os.makedirs(f"{path}/csv", exist_ok=True)
     try:
-        data.to_csv(filename)
-        logger.debug(f"Данные сохранены в: {path}\\{filename}.csv")
+        data.to_csv(f"{path}/csv/{ticker}{period}")
+        logger.debug(f"Данные сохранены в: {path}/csv/{ticker}{period}.csv")
     except Exception as e:
         logger.debug(f"Ошибка вычисления колебания цены закрытия: {e}")
 
