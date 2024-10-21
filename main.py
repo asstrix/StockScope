@@ -19,16 +19,18 @@ def main():
 	stock_data = fetch_stock_data(func_log, ticker, period)
 
 	log.info(f"Добавляем значения MA {ticker} за {period_spell(period)}")
-	add_moving_average(logger, stock_data, 5)
+	add_moving_average(func_log, stock_data, 5)
 
 	log.info(f"Рассчитываем среднюю цену закрытия за {period_spell(period)}")
-	calculate_and_display_average_price(func_log, stock_data)
+	calculate_and_display_average_price(func_log, stock_data, period)
 
 	log.info(f"Рассчитываем % колебания средней цены за период")
-	notify_if_strong_fluctuations(func_log, stock_data, threshold)
-	create_and_save_plot(stock_data)
+	notify_if_strong_fluctuations(func_log, stock_data, threshold, period)
+
+	log.info(f"Сохраняем график средней цены закрытия за {period_spell(period)}")
+	create_and_save_plot(func_log, stock_data, ticker, period)
 	log.info(f"Сохраняем данные в csv")
-	export_to_csv(func_log, stock_data, f'{ticker}{period}')
+	export_to_csv(func_log, stock_data, ticker, period)
 
 	log.info("Стоп")
 
