@@ -81,7 +81,7 @@ def calculate_rsi(logger, data):
         logger.debug(f"Колонка с RSI не добавлена: {e}")
 
 
-# Calculate macd with default
+# Calculate macd with default short=12 and long=26 periods
 def calculate_macd(logger, data):
     try:
         short_ema = data['Close'].ewm(span=12, adjust=False).mean()
