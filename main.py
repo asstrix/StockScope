@@ -10,9 +10,12 @@ def main():
 	func_log = logger.get_function_logger()
 	log.info("Старт")
 
-	ticker = input("Введите тикер акции (например, «AAPL» для Apple Inc):\n")
-	period = input("Введите период для данных (например, '1mo' для одного месяца):\n")
-	threshold = float(input("Введите порог колебания цены в %: \n"))
+	# ticker = input("Введите тикер акции (например, «AAPL» для Apple Inc):\n")
+	# period = input("Введите период для данных (например, '1mo' для одного месяца):\n")
+	# threshold = float(input("Введите порог колебания цены в %: \n"))
+	ticker = "AAPL"
+	period = '1mo'
+	threshold = 3
 	log.info(f"Символ: {ticker}, Период: {period}, % колебания {threshold}")
 
 	log.info(f"Получаем котировки по символу {ticker} за {period_spell(period)}")
@@ -20,6 +23,12 @@ def main():
 
 	log.info(f"Добавляем значения MA {ticker} за {period_spell(period)}")
 	add_moving_average(func_log, stock_data, 5)
+
+	log.info(f"Добавляем значения RSI {ticker} за {period_spell(period)}")
+	calculate_rsi(func_log, stock_data)
+
+	log.info(f"Добавляем значения MACD {ticker} за {period_spell(period)}")
+	calculate_macd(func_log, stock_data)
 
 	log.info(f"Рассчитываем среднюю цену закрытия за {period_spell(period)}")
 	calculate_and_display_average_price(func_log, stock_data, period)
