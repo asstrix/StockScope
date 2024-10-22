@@ -10,12 +10,9 @@ def main():
 	func_log = logger.get_function_logger()
 	log.info("Старт")
 
-	# ticker = input("Введите тикер акции (например, «AAPL» для Apple Inc):\n")
-	# period = input("Введите период для данных (например, '1mo' для одного месяца):\n")
-	# threshold = float(input("Введите порог колебания цены в %: \n"))
-	ticker = "AAPL"
-	period = '1mo'
-	threshold = 3
+	ticker = input("Введите тикер акции (например, «AAPL» для Apple Inc):\n")
+	period = input("Введите период для данных (например, '1mo' для одного месяца):\n")
+	threshold = float(input("Введите порог колебания цены в %: \n"))
 	log.info(f"Символ: {ticker}, Период: {period}, % колебания {threshold}")
 
 	log.info(f"Получаем котировки по символу {ticker} за {period_spell(period)}")
