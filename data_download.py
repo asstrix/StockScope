@@ -53,9 +53,43 @@ def export_to_csv(logger, data, ticker, period):
     os.makedirs(f"{path}/csv", exist_ok=True)
     try:
         data.to_csv(f"{path}/csv/{ticker}{period}")
-        logger.debug(f"Данные сохранены в: {path}/csv/{ticker}{period}.csv")
+        logger.debug(f"Данные сохранены в: {path}\\csv\\{ticker}{period}.csv")
     except Exception as e:
         logger.debug(f"Ошибка вычисления колебания цены закрытия: {e}")
+
+
+# Calculate RSI with default 14 period
+def calculate_rsi(logger, data):
+    try:
+        # Difference between current and previous close price
+        delta = data['Close'].diff()
+
+        # Positive and negative changes
+        gain = delta.where(delta > 0, 0)  # Only positive changes
+        loss = -delta.where(delta < 0, 0)  # Only negative changes (abs values)
+
+        # Average values
+        avg_gain = gain.rolling(window=14, min_periods=1).mean()
+        avg_loss = loss.rolling(window=14, min_periods=1).mean()
+
+        # Relative Strength
+        rs = avg_gain / avg_loss
+        rsi = 100 - (100 / (1 + rs))
+        data['RSI'] = rsi
+        logger.debug(f"Колонка с RSI добавлена")
+    except Exception as e:
+        logger.debug(f"Колонка с RSI не добавлена: {e}")
+
+
+# Calculate macd with default
+def calculate_macd(logger, data):
+    try:
+        short_ema = data['Close'].ewm(span=12, adjust=False).mean()
+        long_ema = data['Close'].ewm(span=26, adjust=False).mean()
+        data['MACD'] = short_ema - long_ema
+        logger.debug(f"Колонка с MACD добавлена")
+    except Exception as e:
+        logger.debug(f"Колонка с MACD не добавлена: {e}")
 
 
 def period_spell(period):
