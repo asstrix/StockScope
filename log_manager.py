@@ -24,6 +24,12 @@ class Logger:
 		__init__(log_dir="logs", log_level=''):
 			Initializes the logger class with the specified logging directory and log level,
 			and sets up the loggers and file handlers.
+
+		get_main_logger():
+			Returns the logger used for main process logging, which logs messages at the INFO level.
+
+		get_function_logger(self):
+			Returns the logger used for function-level logging, which logs messages at the DEBUG level.
 	"""
 	def __init__(self, log_dir="logs", log_level=logging.INFO):
 		"""
