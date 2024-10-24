@@ -25,7 +25,10 @@ def fetch_stock_data(logger, ticker, period):
         Logs a debug message indicating whether the data was successfully fetched or not.
     """
     stock = yf.Ticker(ticker)
-    data = stock.history(period=period).reset_index()
+    if isinstance(period, str):
+        data = stock.history(period=period).reset_index()
+    else:
+        data = stock.history(start=period[0], end=period[1], interval='1d').reset_index()
     if not data.empty:
         logger.debug(f"Quotes for symbol {ticker} received successfully")
         return data

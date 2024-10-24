@@ -1,3 +1,4 @@
+from datetime import datetime
 from data_download import *
 from data_plotting import create_and_save_plot
 from log_manager import Logger, logging
@@ -11,8 +12,12 @@ def main():
 	log.info("Start")
 
 	ticker = input("Enter stock ticker (e.g, «AAPL» for Apple Inc):\n")
-	period = input("Enter data period (e.g, '1mo' for one month):\n")
-	threshold = float(input(" Enter Enter the price fluctuation threshold: \n"))
+	period = input("Enter data period (e.g, '1mo' for one month, 'custom' for custom period):\n")
+	if period == 'custom':
+		start = datetime.strptime(input("Enter start date in yyyy-mm-dd format:\n"), "%Y-%m-%d")
+		end = datetime.strptime(input("Enter end date in yyyy-mm-dd format:\n"), "%Y-%m-%d")
+		custom_period = [start, end]
+	threshold = float(input("Enter the price fluctuation threshold: \n"))
 	log.info(f"Symbol: {ticker}, Period: {period}, % fluctuation {threshold}")
 
 	log.info(f"Getting quotes of {ticker} for {period_spell(period)}")
