@@ -32,19 +32,6 @@ class Logger:
 			Returns the logger used for function-level logging, which logs messages at the DEBUG level.
 	"""
 	def __init__(self, log_dir="logs", log_level=logging.INFO):
-		"""
-		Initialize the Logger class, setting up loggers and file handlers.
-
-		Args:
-			log_dir (str): Directory where log files will be stored. Defaults to "logs".
-			log_level (str): The log level for the file handler. Defaults to the level set for individual loggers.
-
-		Functionality:
-			- Creates a logging directory if it does not exist.
-			- Sets up two loggers: one for general logging (`main_logger`) and one for function-level logging (`function_logger`).
-			- Configures a TimedRotatingFileHandler to rotate logs daily at midnight.
-			- Applies a consistent logging format for both loggers.
-		"""
 		self.log_dir = log_dir
 		self.log_level = log_level
 
@@ -73,23 +60,7 @@ class Logger:
 		self.function_logger.addHandler(handler)
 
 	def get_main_logger(self):
-		"""
-		Get the main logger instance.
-
-		This method returns the logger used for main process logging, which logs messages at the INFO level.
-
-		Returns:
-			logging.Logger: The logger instance for main process logging.
-		"""
 		return self.main_logger
 
 	def get_function_logger(self):
-		"""
-		Get the function-level logger instance.
-
-		This method returns the logger used for function-level logging, which logs messages at the DEBUG level.
-
-		Returns:
-			logging.Logger: The logger instance for function-level debugging.
-		"""
 		return self.function_logger
