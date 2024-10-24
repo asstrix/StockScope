@@ -257,16 +257,40 @@ def period_spell(period):
     Returns:
         str: A human-readable description of the period in Russian. For example, '1mo' returns '1 месяц'.
     """
-    timeframes = {'1d': '1 day',
-                  '5d': '5 days',
-                  '1mo': '1 month',
-                  '3mo': '3 month',
-                  '6mo': '6 month',
-                  '1y': '1 year',
-                  '2y': '2 years',
-                  '5y': '5 years',
-                  '10y': '10 years',
-                  'ytd': 'since the beginning of the current yea',
-                  'max': f'maximum available period'
-                  }
-    return timeframes[period]
+    if isinstance(period, str):
+        timeframes = {'1d': '1 day',
+                      '5d': '5 days',
+                      '1mo': '1 month',
+                      '3mo': '3 month',
+                      '6mo': '6 month',
+                      '1y': '1 year',
+                      '2y': '2 years',
+                      '5y': '5 years',
+                      '10y': '10 years',
+                      'ytd': 'since the beginning of the current yea',
+                      'max': f'maximum available period'
+                      }
+        return timeframes[period]
+    else:
+        date_difference = abs((period[0] - period[1]).days)
+        if date_difference <= 5:
+            period = '1d'
+        elif 6 <= date_difference <= 30:
+            period = '5d'
+        elif 31 <= date_difference <= 90:
+            period = '1mo'
+        elif 91 <= date_difference <= 180:
+            period = '3mo'
+        elif 181 <= date_difference <= 365:
+            period = '6mo'
+        elif 366 <= date_difference <= 730:
+            period = '1y'
+        elif 731 <= date_difference <= 1825:
+            period = '2y'
+        elif 1826 <= date_difference <= 3650:
+            period = '5y'
+        elif 3651 <= date_difference <= 10000:
+            period = '10y'
+        else:
+            period = 'max'
+        return period

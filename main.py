@@ -16,9 +16,9 @@ def main():
 	if period == 'custom':
 		start = datetime.strptime(input("Enter start date in yyyy-mm-dd format:\n"), "%Y-%m-%d")
 		end = datetime.strptime(input("Enter end date in yyyy-mm-dd format:\n"), "%Y-%m-%d")
-		custom_period = [start, end]
+		period = [start, end]
 	threshold = float(input("Enter the price fluctuation threshold: \n"))
-	log.info(f"Symbol: {ticker}, Period: {period}, % fluctuation {threshold}")
+	log.info(f"Symbol: {ticker}, Period: {period_spell(period)}, % fluctuation {threshold}")
 
 	log.info(f"Getting quotes of {ticker} for {period_spell(period)}")
 	stock_data = fetch_stock_data(func_log, ticker, period)
