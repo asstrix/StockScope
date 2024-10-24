@@ -1,7 +1,7 @@
-from datetime import datetime
 from data_download import *
 from data_plotting import create_and_save_plot
 from log_manager import Logger, logging
+from datetime import datetime
 
 logger = Logger(log_level=logging.DEBUG)  # Set INFO to exclude functions' logging
 
@@ -14,8 +14,8 @@ def main():
 	ticker = input("Enter stock ticker (e.g, «AAPL» for Apple Inc):\n")
 	period = input("Enter data period (e.g, '1mo' for one month, 'custom' for custom period):\n")
 	if period == 'custom':
-		start = datetime.strptime(input("Enter start date in yyyy-mm-dd format:\n"), "%Y-%m-%d")
-		end = datetime.strptime(input("Enter end date in yyyy-mm-dd format:\n"), "%Y-%m-%d")
+		start = datetime.strptime(input("Enter start date in dd.mm.yyyy format:\n"), "%d.%m.%Y")
+		end = datetime.strptime(input("Enter end date in dd.mm.yyyy format:\n"), "%d.%m.%Y")
 		period = [start, end]
 	threshold = float(input("Enter the price fluctuation threshold: \n"))
 	log.info(f"Symbol: {ticker}, Period: {period_spell(period)}, % fluctuation {threshold}")
@@ -35,7 +35,7 @@ def main():
 	log.info(f"Calculating average price for {period_spell(period)}")
 	calculate_and_display_average_price(func_log, stock_data, ticker, period)
 
-	log.info(f"Calculating % fluctuation of the average price for {period}")
+	log.info(f"Calculating % fluctuation of the average price for {period_spell(period)}")
 	notify_if_strong_fluctuations(func_log, stock_data, threshold, ticker, period)
 
 	log.info(f"saving average closing price chart for {period_spell(period)}")

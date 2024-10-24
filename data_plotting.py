@@ -1,7 +1,7 @@
 import plotly.graph_objects as go
 from pathlib import Path
 from data_download import period_spell
-import os, pandas as pd
+import os
 
 
 # Export charts as png
@@ -55,7 +55,7 @@ def create_and_save_plot(logger, data, ticker, period):
     path = Path(__file__).parent
     try:
         os.makedirs(f"{path}/charts", exist_ok=True)
-        fig.write_image(f"{path}/charts/{ticker}{period}.png")
+        fig.write_image(f"{path}/charts/{ticker}{period_spell(period)}.png")
         logger.debug(f"The chart has been saved to: {path}\\charts")
     except Exception as e:
         logger.debug(f"Error saving the chart: {e}")

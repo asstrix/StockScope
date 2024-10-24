@@ -1,6 +1,7 @@
 import yfinance as yf
 from pathlib import Path
 import os
+from datetime import timedelta
 
 
 # Get data from fc.yahoo.com
@@ -27,8 +28,8 @@ def fetch_stock_data(logger, ticker, period):
     stock = yf.Ticker(ticker)
     if isinstance(period, str):
         data = stock.history(period=period).reset_index()
-    else:
-        data = stock.history(start=period[0], end=period[1], interval='1d').reset_index()
+    if isinstance(period, list):
+        data = stock.history(start=period[0] - timedelta(days=1), end=period[1] + timedelta(days=1), interval='1d').reset_index()
     if not data.empty:
         logger.debug(f"Quotes for symbol {ticker} received successfully")
         return data
@@ -161,8 +162,8 @@ def export_to_csv(logger, data, ticker, period):
     path = Path(__file__).parent
     os.makedirs(f"{path}/csv", exist_ok=True)
     try:
-        data.to_csv(f"{path}/csv/{ticker}{period}")
-        logger.debug(f"Data saved in: {path}\\csv\\{ticker}{period}.csv")
+        data.to_csv(f"{path}/csv/{ticker}{period_spell(period)}")
+        logger.debug(f"Data saved in: {path}\\csv\\{ticker}{period_spell(period)}.csv")
     except Exception as e:
         logger.debug(f"Error saving data: {e}")
 
@@ -272,25 +273,4 @@ def period_spell(period):
                       }
         return timeframes[period]
     else:
-        date_difference = abs((period[0] - period[1]).days)
-        if date_difference <= 5:
-            period = '1d'
-        elif 6 <= date_difference <= 30:
-            period = '5d'
-        elif 31 <= date_difference <= 90:
-            period = '1mo'
-        elif 91 <= date_difference <= 180:
-            period = '3mo'
-        elif 181 <= date_difference <= 365:
-            period = '6mo'
-        elif 366 <= date_difference <= 730:
-            period = '1y'
-        elif 731 <= date_difference <= 1825:
-            period = '2y'
-        elif 1826 <= date_difference <= 3650:
-            period = '5y'
-        elif 3651 <= date_difference <= 10000:
-            period = '10y'
-        else:
-            period = 'max'
-        return period
+        return period[0].strftime("%d.%m.%Y") + '-' + period[1].strftime("%d.%m.%Y")
