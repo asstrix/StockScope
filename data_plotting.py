@@ -10,7 +10,8 @@ def create_and_save_plot(logger, data, ticker, period):
         Create and save a plot of stock price data, including Close Price, Moving Average, RSI, and MACD.
 
         This function generates a multi-line plot using Plotly, with the stock's closing price, moving average (MA),
-        Relative Strength Index (RSI), and Moving Average Convergence Divergence (MACD) displayed on different axes.
+        Relative Strength Index (RSI), and Moving Average Convergence Divergence (MACD) displayed on different axes
+        with selected theme, if no theme is selected the chart builds by default theme.
         The plot is saved as a PNG file in a 'charts' directory within the script's directory. If any directories
         do not exist, they will be created automatically. The function logs the success or failure of saving the plot.
 
@@ -20,7 +21,6 @@ def create_and_save_plot(logger, data, ticker, period):
                                      'RSI', and 'MACD'.
             ticker (str): The stock ticker symbol, which will be used in the filename.
             period (str): The period string representing the timeframe for the stock data (e.g., '1d', '1mo').
-            theme (str): A theme to be applied on the chart
 
         Returns:
             None: The function generates and saves a plot as an image, but does not return any value.
