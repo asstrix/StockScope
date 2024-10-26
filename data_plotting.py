@@ -5,7 +5,7 @@ import os
 
 
 # Export charts as png
-def create_and_save_plot(logger, data, ticker, period, theme='plotly'):
+def create_and_save_plot(logger, data, ticker, period):
     """
         Create and save a plot of stock price data, including Close Price, Moving Average, RSI, and MACD.
 
@@ -38,6 +38,21 @@ def create_and_save_plot(logger, data, ticker, period, theme='plotly'):
               - 'RSI': displayed on a secondary y-axis with a range of 0 to 100.
               - 'MACD': displayed on a third y-axis overlaying the main axis.
         """
+    themes = {
+        '1': 'plotly_white', '2': 'plotly_dark',
+        '3': 'ggplot2', '4': 'seaborn', '5': 'simple_white',
+        '6': 'presentation', '7': 'xgridoff', '8': 'ygridoff',
+        '9': 'gridon', '10': 'polar'
+    }
+    command = input('Would you like to change a theme? y\\n\n')
+    if command == 'y':
+        choice = input(
+            'Please select one of available themes:\n' +
+            "\n".join(f"{i + 1}. {j}" for i, j in enumerate(themes.values())) + "\n"
+        )
+        theme = themes[choice]
+    else:
+        theme = 'plotly'
     fig = go.Figure()
     fig.add_trace(go.Scatter(x=data['Date'], y=data['Close'], mode='lines', name='Close Price'))
     fig.add_trace(go.Scatter(x=data['Date'], y=data['MA'], mode='lines', name='Moving Average'))
@@ -58,6 +73,7 @@ def create_and_save_plot(logger, data, ticker, period, theme='plotly'):
     try:
         os.makedirs(f"{path}/charts", exist_ok=True)
         fig.write_image(f"{path}/charts/{ticker}{period_spell(period)}.png")
-        logger.debug(f"The chart has been saved to: {path}\\charts")
+        logger.debug(f"The chart has been saved to: {path}\\charts\\{ticker}{period_spell(period)}.png")
+        print(f"The chart has been saved to: {path}\\charts\\{ticker}{period_spell(period)}.png")
     except Exception as e:
         logger.debug(f"Error saving the chart: {e}")

@@ -45,25 +45,12 @@ def main():
 		log.info(f"Saving data to csv")
 		export_to_csv(func_log, stock_data, ticker, period)
 		print(f"Data saved in: {path}\\csv\\{ticker}{period_spell(period)}.csv")
-	command = input('Would you like to save chart as png? y\\n\n')
+	command = input('Would you like to save data as png? y\\n\n')
 	if command == 'y':
-		themes = {
-					'1': 'plotly_white', '2': 'plotly_dark',
-					'3': 'ggplot2', '4': 'seaborn', '5': 'simple_white',
-					'6': 'presentation', '7': 'xgridoff', '8': 'ygridoff',
-					'9': 'gridon', '10': 'polar'
-				}
-		command = input('Would you like to change a theme? y\\n\n')
 		if command == 'y':
-			choice = input(
-				'Please select one of available themes:\n' +
-				"\n".join(f"{i + 1}. {j}" for i, j in enumerate(themes.values())) + "\n"
-			)
-			create_and_save_plot(func_log, stock_data, ticker, period, themes[choice])
-		else:
+			log.info(f"saving average closing price chart for {period_spell(period)}")
 			create_and_save_plot(func_log, stock_data, ticker, period)
-		log.info(f"saving average closing price chart for {period_spell(period)}")
-		print(f"The chart has been saved to: {path}\\charts\\{ticker}{period_spell(period)}.png")
+
 	log.info("Stop")
 
 
