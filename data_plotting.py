@@ -5,7 +5,7 @@ import os
 
 
 # Export charts as png
-def create_and_save_plot(logger, data, ticker, period):
+def create_and_save_plot(logger, data, ticker, period, theme='plotly'):
     """
         Create and save a plot of stock price data, including Close Price, Moving Average, RSI, and MACD.
 
@@ -20,6 +20,7 @@ def create_and_save_plot(logger, data, ticker, period):
                                      'RSI', and 'MACD'.
             ticker (str): The stock ticker symbol, which will be used in the filename.
             period (str): The period string representing the timeframe for the stock data (e.g., '1d', '1mo').
+            theme (str): A theme to be applied on the chart
 
         Returns:
             None: The function generates and saves a plot as an image, but does not return any value.
@@ -50,7 +51,8 @@ def create_and_save_plot(logger, data, ticker, period):
         yaxis3=dict(overlaying='y', side='left', ticklabelposition='inside'),
         width=1200,
         height=800,
-        legend=dict(x=0, y=-0.25)
+        legend=dict(x=0, y=-0.25),
+        template=theme
     )
     path = Path(__file__).parent
     try:
