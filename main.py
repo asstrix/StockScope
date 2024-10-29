@@ -2,17 +2,35 @@ from data_download import *
 from data_plotting import create_and_save_plot
 from log_manager import Logger, logging
 from datetime import datetime
+import shutil
 
 logger = Logger(log_level=logging.DEBUG)  # Set INFO to exclude functions' logging
 
 
 def main():
+	terminal_size = shutil.get_terminal_size(fallback=(80, 20))
+	width = terminal_size.columns
+	text = """
+	Welcome to StockScope
+	This tool can fetch quotes from fc.yahoo.com by builtin periods or by custom interval.
+	Also it adds MA, MACD, RSI indicators within Close prices chart. 
+	It is also available to export data to csv and png files.
+	"""
+	example = """Period examples:
+			builtin: 1d - 1 day, 5d - 5 days, 1mo - 1 month, 3mo - 3 month, 6mo - 6 month, 1y - 1 year, 2y - 2 years,
+					 5y - 5 years, 10y - 10 years, ytd - since the beginning of the current year, max: maximum available period
+			custom:
+					 start date - 01.01.1970
+					 end date - 10.01.1970
+    """
+	print("\n".join(line.center(width) for line in text.strip().splitlines()) + "\n")
 	log = logger.get_main_logger()
 	func_log = logger.get_function_logger()
 	log.info("Start")
-
 	ticker = input("Enter stock ticker (e.g, «AAPL» for Apple Inc):\n")
-	period = input("Enter data period (e.g, '1mo' for one month, 'custom' for custom period):\n")
+	print(example)
+	# period = input("Enter data period (e.g, '1mo' for one month, 'custom' for custom period):\n")
+	period = input("Enter period (type 'custom' for custom period):\n")
 	if period == 'custom':
 		start = datetime.strptime(input("Enter start date in dd.mm.yyyy format:\n"), "%d.%m.%Y")
 		end = datetime.strptime(input("Enter end date in dd.mm.yyyy format:\n"), "%d.%m.%Y")
@@ -38,10 +56,22 @@ def main():
 	log.info(f"Calculating % fluctuation of the average price for {period_spell(period)}")
 	notify_if_strong_fluctuations(func_log, stock_data, threshold, ticker, period)
 
-	log.info(f"saving average closing price chart for {period_spell(period)}")
-	create_and_save_plot(func_log, stock_data, ticker, period)
-	log.info(f"Saving data to csv")
-	export_to_csv(func_log, stock_data, ticker, period)
+	command = input('Would you like to export data to csv? y/n\n')
+	if command.lower() == 'y':
+		log.info(f"Saving data to csv")
+		export_to_csv(func_log, stock_data, ticker, period)
+	command = input('Would you like to export data as png image? y/n\n')
+	if command.lower() == 'y':
+		command = input('Would you like to use special theme? y/n\n')
+	if command.lower() == 'y':
+		themes = {'plotly': 'default', 'plotly_white': 'white', 'plotly_dark': 'dark', 'ggplot2': 'ggplot2',
+				  'seaborn': 'seaborn', 'simple_white': 'simple_white', 'presentation': 'presentation',
+				  'xgridoff': 'xgridoff', 'ygridoff': 'ygridoff', 'gridon': 'gridon', 'polar': 'polar'
+				  }
+		print("\n".join(f"{i+1}. {j}" for i, j in enumerate(themes.values())))
+		command = input('Enter the theme\'s number: \n')
+		log.info(f"saving average closing price chart for {period_spell(period)}")
+		create_and_save_plot(func_log, stock_data, ticker, period)
 
 	log.info("Stop")
 

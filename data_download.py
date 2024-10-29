@@ -127,7 +127,7 @@ def notify_if_strong_fluctuations(logger, data, threshold, ticker, period):
     try:
         fluctuation = ((data['Close'].max() - data['Close'].min()) / data['Close'].min()) * 100
         if fluctuation > threshold:
-            print(f'The fluctuation in the closing price of {ticker} for {period_spell(period)} {fluctuation}% exceeded the specified threshold {threshold}%')
+            print(f'The fluctuation in the closing price of {ticker} for {period_spell(period)} {fluctuation}% exceeded the specified threshold {threshold}%\n')
             logger.debug(f"% fluctuation in closing price calculated successfully")
             return True
         return False
@@ -164,6 +164,7 @@ def export_to_csv(logger, data, ticker, period):
     try:
         data.to_csv(f"{path}/csv/{ticker}{period_spell(period)}")
         logger.debug(f"Data saved in: {path}\\csv\\{ticker}{period_spell(period)}.csv")
+        print(f"Data saved in: {path}\\csv\\{ticker}{period_spell(period)}.csv")
     except Exception as e:
         logger.debug(f"Error saving data: {e}")
 
@@ -262,15 +263,15 @@ def period_spell(period):
         timeframes = {'1d': '1 day',
                       '5d': '5 days',
                       '1mo': '1 month',
-                      '3mo': '3 month',
-                      '6mo': '6 month',
+                      '3mo': '3 months',
+                      '6mo': '6 months',
                       '1y': '1 year',
                       '2y': '2 years',
                       '5y': '5 years',
                       '10y': '10 years',
-                      'ytd': 'since the beginning of the current yea',
-                      'max': f'maximum available period'
+                      'ytd': 'since the beginning of the current year',
+                      'max': 'maximum available period'
                       }
         return timeframes[period]
-    else:
+    elif isinstance(period, list):
         return period[0].strftime("%d.%m.%Y") + '-' + period[1].strftime("%d.%m.%Y")

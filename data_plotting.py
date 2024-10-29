@@ -57,5 +57,6 @@ def create_and_save_plot(logger, data, ticker, period):
         os.makedirs(f"{path}/charts", exist_ok=True)
         fig.write_image(f"{path}/charts/{ticker}{period_spell(period)}.png")
         logger.debug(f"The chart has been saved to: {path}\\charts")
+        print(f"The chart has been saved to: {path}\\charts")
     except Exception as e:
         logger.debug(f"Error saving the chart: {e}")
