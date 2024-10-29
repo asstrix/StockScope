@@ -64,6 +64,42 @@ def add_moving_average(logger, data, window_size):
         logger.debug(f"Moving average price column not added: {e}")
 
 
+# Calculate statistic indicators
+def statistic_indicators(logger, data, ticker, period):
+    """
+    Calculates key statistical indicators for a dataset of closing prices and updates the 'data' dictionary with results.
+
+    This function computes the median, standard deviation (STD), variance, maximum, minimum, and coefficient of variation
+    for the 'Close' column in the provided dataset and stores these indicators in the 'data' dictionary. The function also
+    logs the completion of the calculation or any errors encountered.
+
+   Args:
+        logger (logging.Logger): The logger object used to log debug messages.
+        data (pandas.DataFrame): A DataFrame containing stock data, which must have a 'Close' column with price data.
+        ticker (str): The stock ticker symbol (e.g., 'AAPL').
+        period (str): A string representing the time period for which the average price is calculated
+                      (e.g., '1d', '1mo').
+
+    Returns:
+        None
+
+    Logs:
+        Logs a debug message when the statistic indicators are successfully calculated or if an error occurs.
+
+    """
+    try:
+        data['Median'] = data['Close'].median()
+        data['STD'] = data['Close'].std()
+        data['Variance'] = data['Close'].var()
+        data['Max'] = data['Close'].max()
+        data['Min'] = data['Close'].min()
+        data['Var_coef'] = (data['Close'].std() / data['Close'].mean()) * 100
+        print(f'Statistic indicators have been calculated for {ticker} for {period_spell(period)}')
+        logger.debug(f"Statistic indicators have been calculated")
+    except Exception as e:
+        logger.debug(f"Error calculating statistic indicators: {e}")
+
+
 # Average price for whole requested period
 def calculate_and_display_average_price(logger, data, ticker, period):
     """
@@ -162,7 +198,7 @@ def export_to_csv(logger, data, ticker, period):
     path = Path(__file__).parent
     os.makedirs(f"{path}/csv", exist_ok=True)
     try:
-        data.to_csv(f"{path}/csv/{ticker}{period_spell(period)}")
+        data.to_csv(f"{path}/csv/{ticker}{period_spell(period)}.csv")
         logger.debug(f"Data saved in: {path}\\csv\\{ticker}{period_spell(period)}.csv")
         print(f"Data saved in: {path}\\csv\\{ticker}{period_spell(period)}.csv")
     except Exception as e:

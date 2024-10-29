@@ -2,18 +2,31 @@ from data_download import *
 from data_plotting import create_and_save_plot
 from log_manager import Logger, logging
 from datetime import datetime
-from pathlib import Path
 
 logger = Logger(log_level=logging.DEBUG)  # Set INFO to exclude functions' logging
 
 
 def main():
-	path = Path(__file__).parent
+	width = 80
+	text = """
+		Welcome to StockScope
+		This tool can fetch quotes from fc.yahoo.com by builtin periods or by custom interval.
+		Also it adds MA, MACD, RSI indicators within Close prices chart.
+		It is also available to export data to csv and png files.\n
+		"""
+	example = """Period examples:
+				builtin: 1d - 1 day, 5d - 5 days, 1mo - 1 month, 3mo - 3 month, 6mo - 6 month, 1y - 1 year, 2y - 2 years,
+						 5y - 5 years, 10y - 10 years, ytd - since the beginning of the current year, max: maximum available period
+				custom:
+						 start date - 01.01.1970
+						 end date - 10.01.1970
+	    """
+	print("".join(line.center(width) + "\n" for line in text.strip().splitlines()))
 	log = logger.get_main_logger()
 	func_log = logger.get_function_logger()
 	log.info("Start")
-
 	ticker = input("Enter stock ticker (e.g, «AAPL» for Apple Inc):\n")
+	print(example)
 	period = input("Enter data period (e.g, '1mo' for one month, 'custom' for custom period):\n")
 	if period == 'custom':
 		start = datetime.strptime(input("Enter start date in dd.mm.yyyy format:\n"), "%d.%m.%Y")
@@ -34,6 +47,9 @@ def main():
 	log.info(f"Adding MACD values {ticker} for {period_spell(period)}")
 	calculate_macd(func_log, stock_data)
 
+	log.info(f"Adding statistic indicators {ticker} for {period_spell(period)}")
+	statistic_indicators(func_log, stock_data, ticker, period)
+
 	log.info(f"Calculating average price for {period_spell(period)}")
 	calculate_and_display_average_price(func_log, stock_data, ticker, period)
 
@@ -41,15 +57,13 @@ def main():
 	notify_if_strong_fluctuations(func_log, stock_data, threshold, ticker, period)
 
 	command = input('Would you like to save data to csv? y\\n\n')
-	if command == 'y':
+	if command.lower() == 'y':
 		log.info(f"Saving data to csv")
 		export_to_csv(func_log, stock_data, ticker, period)
-		print(f"Data saved in: {path}\\csv\\{ticker}{period_spell(period)}.csv")
 	command = input('Would you like to save data as png? y\\n\n')
-	if command == 'y':
-		if command == 'y':
-			log.info(f"saving average closing price chart for {period_spell(period)}")
-			create_and_save_plot(func_log, stock_data, ticker, period)
+	if command.lower() == 'y':
+		log.info(f"saving average closing price chart for {period_spell(period)}")
+		create_and_save_plot(func_log, stock_data, ticker, period)
 
 	log.info("Stop")
 
