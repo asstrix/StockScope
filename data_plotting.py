@@ -10,7 +10,8 @@ def create_and_save_plot(logger, data, ticker, period):
         Create and save a plot of stock price data, including Close Price, Moving Average, RSI, and MACD.
 
         This function generates a multi-line plot using Plotly, with the stock's closing price, moving average (MA),
-        Relative Strength Index (RSI), and Moving Average Convergence Divergence (MACD) displayed on different axes.
+        Relative Strength Index (RSI), and Moving Average Convergence Divergence (MACD) displayed on different axes
+        with selected theme, if no theme is selected the chart builds by default theme.
         The plot is saved as a PNG file in a 'charts' directory within the script's directory. If any directories
         do not exist, they will be created automatically. The function logs the success or failure of saving the plot.
 
@@ -37,6 +38,21 @@ def create_and_save_plot(logger, data, ticker, period):
               - 'RSI': displayed on a secondary y-axis with a range of 0 to 100.
               - 'MACD': displayed on a third y-axis overlaying the main axis.
         """
+    themes = {
+        '1': 'plotly_white', '2': 'plotly_dark',
+        '3': 'ggplot2', '4': 'seaborn', '5': 'simple_white',
+        '6': 'presentation', '7': 'xgridoff', '8': 'ygridoff',
+        '9': 'gridon', '10': 'polar'
+    }
+    command = input('Would you like to change a theme? y\\n\n')
+    if command == 'y':
+        choice = input(
+            'Please select one of available themes:\n' +
+            "\n".join(f"{i + 1}. {j}" for i, j in enumerate(themes.values())) + "\n"
+        )
+        theme = themes[choice]
+    else:
+        theme = 'plotly'
     fig = go.Figure()
     fig.add_trace(go.Scatter(x=data['Date'], y=data['Close'], mode='lines', name='Close Price'))
     fig.add_trace(go.Scatter(x=data['Date'], y=data['MA'], mode='lines', name='Moving Average'))
@@ -50,13 +66,14 @@ def create_and_save_plot(logger, data, ticker, period):
         yaxis3=dict(overlaying='y', side='left', ticklabelposition='inside'),
         width=1200,
         height=800,
-        legend=dict(x=0, y=-0.25)
+        legend=dict(x=0, y=-0.25),
+        template=theme
     )
     path = Path(__file__).parent
     try:
         os.makedirs(f"{path}/charts", exist_ok=True)
         fig.write_image(f"{path}/charts/{ticker}{period_spell(period)}.png")
-        logger.debug(f"The chart has been saved to: {path}\\charts")
-        print(f"The chart has been saved to: {path}\\charts")
+        logger.debug(f"The chart has been saved to: {path}\\charts\\{ticker}{period_spell(period)}.png")
+        print(f"The chart has been saved to: {path}\\charts\\{ticker}{period_spell(period)}.png")
     except Exception as e:
         logger.debug(f"Error saving the chart: {e}")
