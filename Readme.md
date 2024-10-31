@@ -11,8 +11,6 @@ The application includes functions for data visualization, moving averages, and 
 - [Usage](#usage)
 - [Configuration](#configuration)
 - [Functions](#functions)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Features
 
