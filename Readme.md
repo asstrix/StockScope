@@ -60,24 +60,24 @@ Adjust settings as needed:
 Period codes: Adjusted with period_spell function for custom periods like '1d', '1mo', or date ranges.
 Logger: Configure logging level and format in the main script for additional debugging.
 Thresholds: Define price fluctuation thresholds for alerts in the function notify_if_strong_fluctuations.
-Functions
-fetch_stock_data
+Functions<br>
+fetch_stock_data<br>
 Fetches historical stock data for a specified ticker and period.
 
-add_moving_average
+add_moving_average<br>
 Calculates a moving average over a given window size and adds it to the data.
 
-statistic_indicators
+statistic_indicators<br>
 Computes statistical measures (median, variance, max, min, etc.) for stock data.
 
-calculate_rsi
+calculate_rsi<br>
 Calculates the Relative Strength Index (RSI) for the stock data.
 
-calculate_macd
+calculate_macd<br>
 Calculates the Moving Average Convergence Divergence (MACD) for the stock data.
 
-export_to_csv
+export_to_csv<br>
 Exports the data to a CSV file.
 
-notify_if_strong_fluctuations
+notify_if_strong_fluctuations<br>
 Checks for significant price fluctuations and triggers an alert if thresholds are exceeded.
