@@ -65,7 +65,7 @@ def main():
 		log.info(f"saving average closing price chart for {period_spell(period)}")
 		create_and_save_plot(func_log, stock_data, ticker, period)
 
-	log.info("Stop")
+	log.info("Stop\n")
 
 
 if __name__ == "__main__":
