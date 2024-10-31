@@ -1,38 +1,57 @@
-from data_download import *
+from data_download import (fetch_stock_data,
+                           add_moving_average,
+                           calculate_rsi,
+                           calculate_macd,
+                           statistic_indicators,
+                           calculate_and_display_average_price,
+                           notify_if_strong_fluctuations,
+                           export_to_csv
+                           )
+from tools import console, colors, period_spell
 from data_plotting import create_and_save_plot
 from log_manager import Logger, logging
-from datetime import datetime
+from InquirerPy import inquirer
 
 logger = Logger(log_level=logging.DEBUG)  # Set INFO to exclude functions' logging
 
 
 def main():
-	width = 80
-	text = """
-		Welcome to StockScope
-		This tool can fetch quotes from fc.yahoo.com by builtin periods or by custom interval.
-		Also it adds MA, MACD, RSI indicators within Close prices chart.
-		It is also available to export data to csv and png files.\n
-		"""
-	example = """Period examples:
-				builtin: 1d - 1 day, 5d - 5 days, 1mo - 1 month, 3mo - 3 month, 6mo - 6 month, 1y - 1 year, 2y - 2 years,
-						 5y - 5 years, 10y - 10 years, ytd - since the beginning of the current year, max: maximum available period
-				custom:
-						 start date - 01.01.1970
-						 end date - 10.01.1970
-	    """
-	print("".join(line.center(width) + "\n" for line in text.strip().splitlines()))
+	welcome_text = """
+	┌────────────────────────────────────── StockScope ──────────────────────────────────────┐
+	│ This tool can fetch quotes from fc.yahoo.com by builtin periods or by custom interval. │
+	│     Also it adds MA, MACD, RSI and statistic indicators within close price chart.      │
+	│               It is also available to export data to csv and png files.                │
+	└────────────────────────────────────────────────────────────────────────────────────────┘
+	"""
+	console.print(f'[#00a400 bold]{welcome_text}[#00a400 bold]')
 	log = logger.get_main_logger()
 	func_log = logger.get_function_logger()
 	log.info("Start")
-	ticker = input("Enter stock ticker (e.g, «AAPL» for Apple Inc):\n")
-	print(example)
-	period = input("Enter data period (e.g, '1mo' for one month, 'custom' for custom period):\n")
-	if period == 'custom':
-		start = datetime.strptime(input("Enter start date in dd.mm.yyyy format:\n"), "%d.%m.%Y")
-		end = datetime.strptime(input("Enter end date in dd.mm.yyyy format:\n"), "%d.%m.%Y")
-		period = [start, end]
-	threshold = float(input("Enter the price fluctuation threshold: \n"))
+	ticker = inquirer.text(message="Enter stock ticker:", instruction="e.g. «AAPL» for Apple Inc\n", style=colors).execute()
+	period = inquirer.select(
+		message="Select period:",
+		choices=["custom", "1d", "5d", "1mo", "3mo", "6mo", "1y", "2y", "5y", "10y", "ytd"],
+		style=colors,
+		cycle=False
+	).execute()
+	if period == "custom":
+		period = [
+			inquirer.text(
+				message="Enter the start date (dd.mm.yyyy):",
+				# validate=validate_date,
+				invalid_message="Invalid date format. Please use dd.mm.yyyy.",
+				style=colors
+			).execute(),
+			inquirer.text(
+				message="Enter the end date (dd.mm.yyyy):",
+				# validate=validate_date,
+				invalid_message="Invalid date format. Please use dd.mm.yyyy.",
+				style=colors
+			).execute()
+		]
+
+	threshold = inquirer.text(message="Enter the price fluctuation threshold:", style=colors).execute()
+
 	log.info(f"Symbol: {ticker}, Period: {period_spell(period)}, % fluctuation {threshold}")
 
 	log.info(f"Getting quotes of {ticker} for {period_spell(period)}")
@@ -56,11 +75,16 @@ def main():
 	log.info(f"Calculating % fluctuation of the average price for {period_spell(period)}")
 	notify_if_strong_fluctuations(func_log, stock_data, threshold, ticker, period)
 
-	command = input('Would you like to save data to csv? y\\n\n')
+	command = inquirer.text(
+		message="Would you like to save data to csv?",
+		instruction="y\\n\n",
+		style=colors).execute()
 	if command.lower() == 'y':
 		log.info(f"Saving data to csv")
 		export_to_csv(func_log, stock_data, ticker, period)
-	command = input('Would you like to save data as png and html? y\\n\n')
+	command = (inquirer.text(
+		message="Would you like to save data as png and html?",
+		instruction="y\\n\n", style=colors).execute())
 	if command.lower() == 'y':
 		log.info(f"saving average closing price chart for {period_spell(period)}")
 		create_and_save_plot(func_log, stock_data, ticker, period)

@@ -1,7 +1,8 @@
 import plotly.graph_objects as go
-from pathlib import Path
-from data_download import period_spell
+from tools import period_spell
 import os
+from InquirerPy import inquirer
+from tools import path, console, colors
 
 
 # Export charts as png
@@ -45,19 +46,18 @@ def create_and_save_plot(logger, data, ticker, period):
               - 'Variance': displayed close price spread around the average.
               - 'Coefficient of Variation': displayed ratio of standard deviation to mean
         """
-    themes = {
-        '1': 'plotly_white', '2': 'plotly_dark',
-        '3': 'ggplot2', '4': 'seaborn', '5': 'simple_white',
-        '6': 'presentation', '7': 'xgridoff', '8': 'ygridoff',
-        '9': 'gridon', '10': 'polar'
-    }
-    command = input('Would you like to change a theme? y\\n\n')
+
+    command = inquirer.text(
+        message="Would you like to change a theme?",
+        instruction="y\\n\n",
+        style=colors).execute()
     if command == 'y':
-        choice = input(
-            'Please select one of available themes:\n' +
-            "\n".join(f"{i + 1}. {j}" for i, j in enumerate(themes.values())) + "\n"
-        )
-        theme = themes[choice]
+        theme = inquirer.select(
+            message="Select theme:",
+            choices=["plotly_white", "plotly_dark", "ggplot2", "seaborn", "simple_white", "presentation", "xgridoff", "ygridoff", "gridon", "polar"],
+            style=colors,
+            cycle=False
+        ).execute()
     else:
         theme = 'plotly'
     fig = go.Figure()
@@ -89,14 +89,14 @@ def create_and_save_plot(logger, data, ticker, period):
         legend=dict(x=0, y=-0.5),
         template=theme
     )
-    path = Path(__file__).parent
     try:
+
         os.makedirs(f"{path}/charts", exist_ok=True)
         fig.write_html(f"{path}/charts/{ticker}{period_spell(period)}.html")
         logger.debug(f"The chart has been saved to: {path}\\charts\\{ticker}{period_spell(period)}.html")
-        print(f"The chart has been saved to: {path}\\charts\\{ticker}{period_spell(period)}.html")
-        fig.write_image(f"{path}/charts/{ticker}{period_spell(period)}.png")
-        logger.debug(f"The chart has been saved to: {path}\\charts\\{ticker}{period_spell(period)}.png")
-        print(f"The chart has been saved to: {path}\\charts\\{ticker}{period_spell(period)}.png")
+        console.print(f"[#00a400 bold]The chart has been saved to: {path}\\charts\\{ticker}{period_spell(period)}.html[#00a400 bold]")
+        # fig.write_image(f"{path}/charts/{ticker}{period_spell(period)}.png")
+        # logger.debug(f"The chart has been saved to: {path}\\charts\\{ticker}{period_spell(period)}.png")
+        # console.print(f"[#00a400 bold]The chart has been saved to: {path}\\charts\\{ticker}{period_spell(period)}.png[#00a400 bold]")
     except Exception as e:
         logger.debug(f"Error saving the chart: {e}")
