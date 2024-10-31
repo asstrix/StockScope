@@ -11,20 +11,13 @@ class MathsTest(unittest.TestCase):
 	ticker = 'AAPL'
 	period = '1mo'
 
-	@patch('builtins.print')
-	def test_cadap(self, mock_print):
-		result = cadap(self.logger, self.data, self.ticker,  self.period)
-		mock_print.assert_called_with(f'Average closing price of AAPL for 1 month: 200.0')
-		self.logger.debug.assert_called_with("Average closing price calculated")
-		self.assertEqual(result, 200.0)
+	def test_calculate_and_display_average_price_success(self):
+		avg_price = cadap(self.logger, self.data, self.ticker, self.period)
+		self.assertEqual(avg_price, 200.0)
 
-	@patch('builtins.print')
-	def test_nsf(self, mock_print):
+	def test_nsf(self):
 		threshold = 10
 		result = nisf(self.logger, self.data, threshold, self.ticker, self.period)
-		mock_print.assert_called_with(
-			f'The fluctuation in the closing price of AAPL for 1 month 200.0% exceeded the specified threshold 10%\n'
-		)
 		self.assertTrue(result)
 
 

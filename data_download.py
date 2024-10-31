@@ -128,6 +128,7 @@ def calculate_and_display_average_price(logger, data, ticker, period):
         avg_price = data['Close'].mean()
         logger.debug(f"Average closing price calculated")
         console.print(f'[#00a400 bold]Average closing price of {ticker} for {period_spell(period)}: {avg_price}[#00a400 bold]')
+        return avg_price
     except Exception as e:
         logger.debug(f"Error calculating average closing price: {e}")
 
