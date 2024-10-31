@@ -28,7 +28,7 @@ The application includes functions for data visualization, moving averages, and 
 To run StockScope, you need Python 3.x and the required packages. Clone this repository and install dependencies:
 
 bash
-git clone https://github.com/yourusername/StockScope.git
+git clone https://github.com/asstrix/StockScope.git
 cd StockScope
 pip install -r requirements.txt
 
