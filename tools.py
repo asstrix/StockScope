@@ -44,4 +44,4 @@ def period_spell(period):
                       }
         return timeframes[period]
     elif isinstance(period, list):
-        return period[0].strftime("%d.%m.%Y") + '-' + period[1].strftime("%d.%m.%Y")
+        return period[0] + '-' + period[1]

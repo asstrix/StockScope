@@ -1,5 +1,5 @@
 import yfinance as yf
-from datetime import timedelta
+from datetime import timedelta, datetime
 import os
 from tools import path, console, period_spell
 
@@ -29,7 +29,9 @@ def fetch_stock_data(logger, ticker, period):
     if isinstance(period, str):
         data = stock.history(period=period).reset_index()
     if isinstance(period, list):
-        data = stock.history(start=period[0] - timedelta(days=1), end=period[1] + timedelta(days=1), interval='1d').reset_index()
+        start = datetime.strptime(period[0], "%d.%m.%Y")
+        end = datetime.strptime(period[1], "%d.%m.%Y")
+        data = stock.history(start=start - timedelta(days=1), end=end + timedelta(days=1), interval='1d').reset_index()
     if not data.empty:
         logger.debug(f"Quotes for symbol {ticker} received successfully")
         return data

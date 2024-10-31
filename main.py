@@ -49,7 +49,6 @@ def main():
 				style=colors
 			).execute()
 		]
-
 	threshold = inquirer.text(message="Enter the price fluctuation threshold:", style=colors).execute()
 
 	log.info(f"Symbol: {ticker}, Period: {period_spell(period)}, % fluctuation {threshold}")
@@ -60,7 +59,7 @@ def main():
 	log.info(f"Adding MA values {ticker} for {period_spell(period)}")
 	add_moving_average(func_log, stock_data, 5)
 
-	log.info(f" Adding RSI values {ticker} for {period_spell(period)}")
+	log.info(f"Adding RSI values {ticker} for {period_spell(period)}")
 	calculate_rsi(func_log, stock_data)
 
 	log.info(f"Adding MACD values {ticker} for {period_spell(period)}")
