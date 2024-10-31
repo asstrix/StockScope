@@ -13,8 +13,9 @@ def create_and_save_plot(logger, data, ticker, period):
         Relative Strength Index (RSI), and Moving Average Convergence Divergence (MACD), Median, Standard Deviation,
         Variance, Max and Min Close price values and Coefficient of Variation are displayed on different axes
         with selected theme, if no theme is selected the chart builds by default theme.
-        The plot is saved as a PNG file in a 'charts' directory within the script's directory. If any directories
-        do not exist, they will be created automatically. The function logs the success or failure of saving the plot.
+        The plot is saved as an interactive chart in html format in the 'charts' directory within the script's directory.
+        If any directories do not exist, they will be created automatically. The function logs the success or failure of
+        saving the plot.
 
         Args:
             logger (logging.Logger): The logger object used to log debug messages.
@@ -83,14 +84,17 @@ def create_and_save_plot(logger, data, ticker, period):
         yaxis5=dict(overlaying='y', range=[min(data['Variance']), max(data['Variance'])], showticklabels=False, visible=False),
         yaxis6=dict(overlaying='y', range=[min(data['Var_coef']), max(data['Var_coef'])], showticklabels=False,
                     visible=False),
-        width=1200,
-        height=800,
+        width=1920,
+        height=1080,
         legend=dict(x=0, y=-0.5),
         template=theme
     )
     path = Path(__file__).parent
     try:
         os.makedirs(f"{path}/charts", exist_ok=True)
+        fig.write_html(f"{path}/charts/{ticker}{period_spell(period)}.html")
+        logger.debug(f"The chart has been saved to: {path}\\charts\\{ticker}{period_spell(period)}.html")
+        print(f"The chart has been saved to: {path}\\charts\\{ticker}{period_spell(period)}.html")
         fig.write_image(f"{path}/charts/{ticker}{period_spell(period)}.png")
         logger.debug(f"The chart has been saved to: {path}\\charts\\{ticker}{period_spell(period)}.png")
         print(f"The chart has been saved to: {path}\\charts\\{ticker}{period_spell(period)}.png")

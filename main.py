@@ -60,7 +60,7 @@ def main():
 	if command.lower() == 'y':
 		log.info(f"Saving data to csv")
 		export_to_csv(func_log, stock_data, ticker, period)
-	command = input('Would you like to save data as png? y\\n\n')
+	command = input('Would you like to save data as png and html? y\\n\n')
 	if command.lower() == 'y':
 		log.info(f"saving average closing price chart for {period_spell(period)}")
 		create_and_save_plot(func_log, stock_data, ticker, period)
