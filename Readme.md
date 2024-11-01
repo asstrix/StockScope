@@ -32,18 +32,13 @@ run main.py in cmd
 
 
 Usage
-Initialize the Logger: Set up logging to track program actions.
-Specify Ticker and Period: Input the stock ticker and desired period (e.g., 'AAPL' and '1mo').
-Call Functions: Use functions such as fetch_stock_data, add_moving_average, or calculate_rsi to analyze the data.
-Export Results: Export data to a CSV file with export_to_csv.
-Example Code
-python
-Copy code
-import logging
-from data_download import fetch_stock_data, add_moving_average, export_to_csv
+Initialize the Logger: Set up logging to track program actions.<br>
+Specify Ticker and Period: Input the stock ticker and desired period (e.g., 'AAPL' and '1mo').<br>
+Call Functions: Use functions such as fetch_stock_data, add_moving_average, or calculate_rsi to analyze the data.<br>
+Export Results: Export data to a CSV file with export_to_csv.<br>
 
 # Initialize logger
-logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)<br>
 logging.basicConfig(level=logging.DEBUG)
 
 # Fetch data
@@ -53,13 +48,14 @@ data = fetch_stock_data(logger, ticker="AAPL", period="1mo")
 add_moving_average(logger, data, window_size=20)
 
 # Export to CSV
-export_to_csv(logger, data, ticker="AAPL", period="1mo")
-Configuration
-Adjust settings as needed:
+export_to_csv(logger, data, ticker="AAPL", period="1mo")<br>
+Configuration<br>
+Adjust settings as needed:<br>
 
-Period codes: Adjusted with period_spell function for custom periods like '1d', '1mo', or date ranges.
-Logger: Configure logging level and format in the main script for additional debugging.
-Thresholds: Define price fluctuation thresholds for alerts in the function notify_if_strong_fluctuations.
+Period codes: Adjusted with period_spell function for custom periods like '1d', '1mo', or date ranges.<br>
+Logger: Configure logging level and format in the main script for additional debugging.<br>
+Thresholds: Define price fluctuation thresholds for alerts in the function notify_if_strong_fluctuations.<br>
+
 Functions<br>
 fetch_stock_data<br>
 Fetches historical stock data for a specified ticker and period.
