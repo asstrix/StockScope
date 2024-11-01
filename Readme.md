@@ -18,6 +18,7 @@ The application includes functions for data visualization, moving averages, and 
 - **Calculate statistical indicators** such as mean, variance, and standard deviation of stock prices.
 - **Add financial indicators** like Moving Average (MA), MACD, and RSI to the data.
 - **Export data to CSV** for offline analysis.
+- **Export data to HTML** for data visualization.
 - **Threshold-based alerts** for price fluctuations.
 - **Console output** with human-readable descriptions of the analysis results.
 
@@ -74,6 +75,9 @@ Calculates the Moving Average Convergence Divergence (MACD) for the stock data.
 
 export_to_csv<br>
 Exports the data to a CSV file.
+
+create_and_save_plot<br>
+Exports the data to a HTML file.
 
 notify_if_strong_fluctuations<br>
 Checks for significant price fluctuations and triggers an alert if thresholds are exceeded.
